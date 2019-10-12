@@ -85,15 +85,15 @@ var UIController = (function () {
             var html, newHtml, element;
             // html string z placeholderem
 
-            if(type === 'food') {
+            if (type === 'food') {
                 element = DOMstrings.foodContainer;
-                html = '<div class="item clearfix" id="food-%id%"> <div class="item-description">%description%</div> <div class="right clearfix"> <div class="item-calories">%calories%</div> <div class="item-delete"> <button class="item-delete-btn"> <i class="icon-ios-close-outline"></i> </button > </div > </div > </div > '
+                html = '<div class="item clearfix" id="food-%id%"> <div class="item-description">%description%</div> <div class="right clearfix"> <div class="item-calories">%calories%</div> <div class="item-delete"> <button class="item-delete-btn"> <i class="ion-ios-close-outline"></i> </button > </div > </div > </div > '
             }
-            else if (type === 'activity'){
+            else if (type === 'activity') {
                 element = DOMstrings.activityContainer;
-                html = '<div class="item clearfix" id="activity-%id%"> <div class="item-description">%description%</div> <div class="right clearfix"> <div class="item-calories">%calories%</div> <div class="item-delete"> <button class="item-delete-btn"> <i class="icon-ios-close-outline"></i> </button> </div> </div> </div>'
+                html = '<div class="item clearfix" id="activity-%id%"> <div class="item-description">%description%</div> <div class="right clearfix"> <div class="item-calories">%calories%</div> <div class="item-delete"> <button class="item-delete-btn"> <i class="ion-ios-close-outline"></i> </button> </div> </div> </div>'
             }
-            
+
             // zastąpić placeholdera danymi użytkownika
             newHtml = html.replace('%id%', obj.id);
             newHtml = newHtml.replace('%description%', obj.description);
@@ -104,12 +104,25 @@ var UIController = (function () {
 
         },
 
-getDOMstrings: function() {
-    return DOMstrings;
-}
+        clearFields: function () {
+            var fields, fieldsArr;
+            fields = document.querySelectorAll(DOMstrings.inputDescription + ', ' + DOMstrings.inputCalories + ', ' + DOMstrings.inputCarbohydrates + ', ' + DOMstrings.inputFats + ', ' + DOMstrings.inputProteins);
+
+            fieldsArr = Array.prototype.slice.call(fields);
+
+            fieldsArr.forEach(function(current, index, array) {
+                current.value = "";
+            });
+
+            fieldsArr[0].focus();
+        },
+
+        getDOMstrings: function () {
+            return DOMstrings;
+        }
     }
 
-}) ();
+})();
 
 // glowny modul, bedacy lacznikiem miedzy dwoma pozostalymi modulami
 var controller = (function (dataCtrl, UICtrl) {
@@ -138,6 +151,9 @@ var controller = (function (dataCtrl, UICtrl) {
 
         // 3. dodaj element do UI
         UICtrl.addListItem(newItem, input.type);
+
+        // wyczyść pole
+        UICtrl.clearFields();
         // 4. przelicz zapotrzebowanie kaloryczne
         // 5. wyswietl zapotzrebowania
     };
