@@ -7,10 +7,13 @@ var dataController = (function () {
         this.calories = calories;
     };
 
-    var Food = function (id, description, calories) {
+    var Food = function (id, description, calories, carbohydrates, fats, proteins) {
         this.id = id;
         this.description = description;
         this.calories = calories;
+        this.carbohydrates = carbohydrates;
+        this.fats = fats;
+        this.proteins = proteins;
     };
 
     var data = {
@@ -25,7 +28,7 @@ var dataController = (function () {
     }
 
     return {
-        addItem: function (type, des, val) {
+        addItem: function (type, des, cal, car, fat, pro) {
             var newItem, ID;
 
             // tworzenie nowego ID
@@ -38,9 +41,9 @@ var dataController = (function () {
 
             // nowy element zależny od typu
             if (type === 'activity') {
-                newItem = new Activity(ID, des, val);
+                newItem = new Activity(ID, des, cal);
             } else if (type === 'food') {
-                newItem = new Food(ID, des, val);
+                newItem = new Food(ID, des, cal, car, fat, pro);
             }
 
             // dodanie elementu do struktury
@@ -74,10 +77,10 @@ var UIController = (function () {
             return {
                 type: document.querySelector(DOMstrings.inputType).value,
                 description: document.querySelector(DOMstrings.inputDescription).value,
-                calories: document.querySelector(DOMstrings.inputCalories).value,
-                carbohydrates: document.querySelector(DOMstrings.inputCarbohydrates).value,
-                proteins: document.querySelector(DOMstrings.inputProteins).value,
-                fats: document.querySelector(DOMstrings.inputFats).value,
+                calories: parseFloat(document.querySelector(DOMstrings.inputCalories).value),
+                carbohydrates: parseFloat(document.querySelector(DOMstrings.inputCarbohydrates).value),
+                proteins: parseFloat(document.querySelector(DOMstrings.inputProteins).value),
+                fats: parseFloat(document.querySelector(DOMstrings.inputFats).value),
             }
         },
 
@@ -110,7 +113,7 @@ var UIController = (function () {
 
             fieldsArr = Array.prototype.slice.call(fields);
 
-            fieldsArr.forEach(function(current, index, array) {
+            fieldsArr.forEach(function (current, index, array) {
                 current.value = "";
             });
 
@@ -139,6 +142,12 @@ var controller = (function (dataCtrl, UICtrl) {
         });
     };
 
+    var updateData = function () {
+        // 1. przelicz zapotrzebowanie kaloryczne
+        // 2. zwróc zapotrzebowanie
+        // 3. wyswietl zapotzrebowania
+    };
+
     var ctrlAddItem = function () {
 
         var input, newItem;
@@ -146,16 +155,32 @@ var controller = (function (dataCtrl, UICtrl) {
         // 1. zabierz dane z wypelnionych pól
         input = UICtrl.getinput();
 
-        // 2. dodaj element do dataControllera
-        newItem = dataCtrl.addItem(input.type, input.description, input.calories);
+        if (input.type === "activity" && input.description !== "" && !isNaN(input.calories) && input.calories > 0) {
+            // 2. dodaj element do dataControllera
+            newItem = dataCtrl.addItem(input.type, input.description, input.calories, input.carbohydrates, input.fats, input.proteins);
 
-        // 3. dodaj element do UI
-        UICtrl.addListItem(newItem, input.type);
+            // 3. dodaj element do UI
+            UICtrl.addListItem(newItem, input.type);
 
-        // wyczyść pole
-        UICtrl.clearFields();
-        // 4. przelicz zapotrzebowanie kaloryczne
-        // 5. wyswietl zapotzrebowania
+            // wyczyść pole
+            UICtrl.clearFields();
+
+            // przelicz i zaktualizuj dane
+            updateData();
+        } else if (input.type === "food" && input.description !== "" && !isNaN(input.calories) && input.calories > 0 && !isNaN(input.carbohydrates) && input.carbohydrates > 0 && !isNaN(input.fats) && input.fats > 0 && !isNaN(input.proteins) && input.proteins > 0){
+            // 2. dodaj element do dataControllera
+            newItem = dataCtrl.addItem(input.type, input.description, input.calories, input.carbohydrates, input.fats, input.proteins);
+
+            // 3. dodaj element do UI
+            UICtrl.addListItem(newItem, input.type);
+
+            // wyczyść pole
+            UICtrl.clearFields();
+
+            // przelicz i zaktualizuj dane
+            updateData();
+        }
+
     };
 
     return {
