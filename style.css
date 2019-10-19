@@ -108,6 +108,34 @@ body {
     width: 50%;
 }
 
+.activity {
+    float: left;
+    width: 50%;
+}
+
+.item {
+    float: left;
+    width: 100%;
+}
+
+.item-description {
+    float: left;
+}
+
+.item-calories {
+    float: left;
+    padding: 0 0.5em 0 0;
+}
+
+.item-delete {
+    float: left;
+    padding: 0 0.5em 0 0;
+}
+
+.toRight {
+    float: right;
+}
+
 
 
 

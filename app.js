@@ -16,6 +16,24 @@ var dataController = (function () {
         this.proteins = proteins;
     };
 
+    var calculateTotal = function(type) {
+        var totalCalories = 0;
+        var totalCarbs = 0;
+        data.allItems[type].forEach(function(cur) {
+            totalCalories += cur.calories;
+            // totalCarbs = cur.carbohydrates;
+
+            if (type === "food"){
+                totalCarbs = cur.carbohydrates;
+            }
+            else if (type === "activity"){
+                totalCarbs = 0;
+            }
+        });
+        data.totals[type] = totalCalories;
+        data.carbohydrates += totalCarbs;
+    };
+
     var data = {
         allItems: {
             food: [],
@@ -24,8 +42,10 @@ var dataController = (function () {
         totals: {
             food: 0,
             activity: 0,
-        }
-    }
+        },
+        carbohydrates: 0,
+        balance: 0,
+    };
 
     return {
         addItem: function (type, des, cal, car, fat, pro) {
@@ -49,6 +69,25 @@ var dataController = (function () {
             // dodanie elementu do struktury
             data.allItems[type].push(newItem);
             return newItem;
+        },
+
+        calculateData: function(){
+            // obliczyć nabyte i spalone kalorie
+            calculateTotal('food');
+            calculateTotal('activity')
+            // obliczyć składniki odżywcze
+
+            // obliczyć bilans: food - activity
+            data.balance = data.totals.food - data.totals.activity;
+        },
+
+        getData: function(){
+            return {
+                balance: data.balance,
+                totalFood: data.totals.food,
+                totalActivity: data.totals.activity,
+                totalCarbs: data.carbohydrates,
+            }
         },
 
         testing: function () {
@@ -90,11 +129,11 @@ var UIController = (function () {
 
             if (type === 'food') {
                 element = DOMstrings.foodContainer;
-                html = '<div class="item clearfix" id="food-%id%"> <div class="item-description">%description%</div> <div class="right clearfix"> <div class="item-calories">%calories%</div> <div class="item-delete"> <button class="item-delete-btn"> <i class="ion-ios-close-outline"></i> </button > </div > </div > </div > '
+                html = '<div class="item clearfix" id="food-%id%"> <div class="item-description">%description%</div> <div class="toRight"> <div class="item-calories">%calories%</div> <div class="item-delete"> <button class="item-delete-btn"> <i class="ion-ios-close-outline"></i> </button> </div> </div> </div>'
             }
             else if (type === 'activity') {
                 element = DOMstrings.activityContainer;
-                html = '<div class="item clearfix" id="activity-%id%"> <div class="item-description">%description%</div> <div class="right clearfix"> <div class="item-calories">%calories%</div> <div class="item-delete"> <button class="item-delete-btn"> <i class="ion-ios-close-outline"></i> </button> </div> </div> </div>'
+                html = '<div class="item clearfix" id="activity-%id%"> <div class="item-description">%description%</div> <div class="toRight"> <div class="item-calories">%calories%</div> <div class="item-delete"> <button class="item-delete-btn"> <i class="ion-ios-close-outline"></i> </button> </div> </div> </div>'
             }
 
             // zastąpić placeholdera danymi użytkownika
@@ -143,9 +182,12 @@ var controller = (function (dataCtrl, UICtrl) {
     };
 
     var updateData = function () {
-        // 1. przelicz zapotrzebowanie kaloryczne
-        // 2. zwróc zapotrzebowanie
-        // 3. wyswietl zapotzrebowania
+        // 1. przelicz bilans kaloryczne
+        dataCtrl.calculateData();
+        // 2. zwróc bilans
+        var balance = dataController.getData();
+        // 3. wyswietl bilans
+        console.log(balance);
     };
 
     var ctrlAddItem = function () {
