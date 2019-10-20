@@ -21,17 +21,17 @@ var dataController = (function () {
         var totalCarbs = 0;
         data.allItems[type].forEach(function(cur) {
             totalCalories += cur.calories;
-            // totalCarbs = cur.carbohydrates;
-
             if (type === "food"){
                 totalCarbs = cur.carbohydrates;
             }
             else if (type === "activity"){
                 totalCarbs = 0;
             }
+            cur.carbohydrates=0;
         });
         data.totals[type] = totalCalories;
         data.carbohydrates += totalCarbs;
+        
     };
 
     var data = {
