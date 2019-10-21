@@ -19,19 +19,23 @@ var dataController = (function () {
     var calculateTotal = function(type) {
         var totalCalories = 0;
         var totalCarbs = 0;
+        var totalFats = 0;
+        var totalProteins = 0;
         data.allItems[type].forEach(function(cur) {
             totalCalories += cur.calories;
             if (type === "food"){
                 totalCarbs = cur.carbohydrates;
+                totalFats = cur.fats;
+                totalProteins = cur.proteins;
             }
-            else if (type === "activity"){
-                totalCarbs = 0;
-            }
-            cur.carbohydrates=0;
+            cur.carbohydrates = 0;
+            cur.fats = 0;
+            cur.proteins = 0;
         });
         data.totals[type] = totalCalories;
         data.carbohydrates += totalCarbs;
-        
+        data.fats += totalFats;
+        data.proteins += totalProteins;
     };
 
     var data = {
@@ -44,6 +48,8 @@ var dataController = (function () {
             activity: 0,
         },
         carbohydrates: 0,
+        fats: 0,
+        proteins: 0,
         balance: 0,
     };
 
@@ -87,6 +93,8 @@ var dataController = (function () {
                 totalFood: data.totals.food,
                 totalActivity: data.totals.activity,
                 totalCarbs: data.carbohydrates,
+                totalFats: data.fats,
+                totalProteins: data.proteins
             }
         },
 
@@ -118,8 +126,8 @@ var UIController = (function () {
                 description: document.querySelector(DOMstrings.inputDescription).value,
                 calories: parseFloat(document.querySelector(DOMstrings.inputCalories).value),
                 carbohydrates: parseFloat(document.querySelector(DOMstrings.inputCarbohydrates).value),
-                proteins: parseFloat(document.querySelector(DOMstrings.inputProteins).value),
                 fats: parseFloat(document.querySelector(DOMstrings.inputFats).value),
+                proteins: parseFloat(document.querySelector(DOMstrings.inputProteins).value),
             }
         },
 
