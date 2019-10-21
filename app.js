@@ -95,7 +95,7 @@ var dataController = (function () {
                 totalCarbs: data.carbohydrates,
                 totalFats: data.fats,
                 totalProteins: data.proteins
-            }
+            };
         },
 
         testing: function () {
@@ -118,7 +118,14 @@ var UIController = (function () {
         inputBtn: '.add-button',
         foodContainer: '.food-list',
         activityContainer: '.activity-list',
-    }
+        caloriesBalance: '.calories-balance',
+        absorbedCalories: '.absorbed-calories-value',
+        burnedCalories: '.burned-calories-value',
+        outputCarbs: '.carbohydrates-value',
+        outputFats: '.fats-value',
+        outputProteins: '.proteins-value'
+    };
+
     return {
         getinput: function () {
             return {
@@ -167,6 +174,15 @@ var UIController = (function () {
             fieldsArr[0].focus();
         },
 
+        displayData: function(obj){
+            document.querySelector(DOMstrings.caloriesBalance).textContent = obj.balance;
+            document.querySelector(DOMstrings.absorbedCalories).textContent = obj.totalFood;
+            document.querySelector(DOMstrings.burnedCalories).textContent = obj.totalActivity;
+            document.querySelector(DOMstrings.outputCarbs).textContent = obj.totalCarbs;
+            document.querySelector(DOMstrings.outputFats).textContent = obj.totalFats;
+            document.querySelector(DOMstrings.outputProteins).textContent = obj.totalProteins;
+        },
+
         getDOMstrings: function () {
             return DOMstrings;
         }
@@ -195,7 +211,7 @@ var controller = (function (dataCtrl, UICtrl) {
         // 2. zwróc bilans
         var balance = dataController.getData();
         // 3. wyswietl bilans
-        console.log(balance);
+        UICtrl.displayData(balance);
     };
 
     var ctrlAddItem = function () {
@@ -236,6 +252,14 @@ var controller = (function (dataCtrl, UICtrl) {
     return {
         init: function () {
             console.log("start");
+            UICtrl.displayData({
+                balance: 0,
+                totalFood: 0,
+                totalActivity: 0,
+                totalCarbs: 0,
+                totalFats: 0,
+                totalProteins: 0
+            });
             setupEventListeners();
         }
     }
