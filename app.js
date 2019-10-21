@@ -123,7 +123,8 @@ var UIController = (function () {
         burnedCalories: '.burned-calories-value',
         outputCarbs: '.carbohydrates-value',
         outputFats: '.fats-value',
-        outputProteins: '.proteins-value'
+        outputProteins: '.proteins-value',
+        displayContainer: '.display-list-container'
     };
 
     return {
@@ -203,6 +204,8 @@ var controller = (function (dataCtrl, UICtrl) {
                 ctrlAddItem();
             }
         });
+
+        document.querySelector(DOM.displayContainer).addEventListener('click', ctrlDeleteItem);
     };
 
     var updateData = function () {
@@ -247,6 +250,20 @@ var controller = (function (dataCtrl, UICtrl) {
             updateData();
         }
 
+    };
+
+    var ctrlDeleteItem = function(event) {
+        var itemID, splitID, type, ID;
+        itemID = event.target.parentNode.parentNode.parentNode.parentNode.id;
+        if(itemID){
+            splitID = itemID.split('-');
+            type = splitID[0];
+            ID = splitID[1];
+
+            // 1.usunąć element ze struktury danych
+            // 2. usunąć z UI
+            // 3. zaktualizować bilans i wyświetlić go
+        }
     };
 
     return {
