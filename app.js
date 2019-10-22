@@ -77,6 +77,17 @@ var dataController = (function () {
             return newItem;
         },
 
+        deleteItem: function(type, id) {
+            var ids, index;
+            ids = data.allItems[type].map(function(current){
+                return current.id; 
+            });
+            index = ids.indexOf(id);
+            if(index !== -1){
+                data.allItems[type].splice(index, 1);
+            }
+        },
+
         calculateData: function(){
             // obliczyć nabyte i spalone kalorie
             calculateTotal('food');
@@ -160,6 +171,11 @@ var UIController = (function () {
             // włożyć stworzony html do DOMu
             document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
 
+        },
+
+        deleteListItem: function(selectorID){
+            var el = document.getElementById(selectorID);
+            el.parentNode.removeChild(el);
         },
 
         clearFields: function () {
@@ -258,11 +274,14 @@ var controller = (function (dataCtrl, UICtrl) {
         if(itemID){
             splitID = itemID.split('-');
             type = splitID[0];
-            ID = splitID[1];
+            ID = parseInt(splitID[1]);
 
             // 1.usunąć element ze struktury danych
+            dataCtrl.deleteItem(type, ID);
             // 2. usunąć z UI
+            UICtrl.deleteListItem(itemID);
             // 3. zaktualizować bilans i wyświetlić go
+            updateData();
         }
     };
 
