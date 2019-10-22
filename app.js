@@ -39,6 +39,7 @@ var dataController = (function () {
     };
 
     var data = {
+        bmiResult: -1,
         allItems: {
             food: [],
             activity: [],
@@ -54,6 +55,21 @@ var dataController = (function () {
     };
 
     return {
+
+        calculateBmi: function(weight, height){
+            var bmi, bmiResult;
+            // obliczanie bmi
+            bmi = weight / Math.pow(height, 2);
+            if (bmi > 0 && bmi < 18.5) bmiResult = 0; //"niedowaga";
+            else if (bmi >= 18.5 && bmi <= 24.9) bmiResult = 1; //"waga prawidłowa";
+            else if (bmi > 24.9 && bmi <= 29.9) bmiResult = 2; //"nadwaga";
+            else if (bmi > 29.9) bmiResult = 3; //"otyłość";
+            else bmiResult = -1;
+            // dodanie wyniku do struktury
+            data.bmiResult = bmiResult;
+            return bmiResult;
+        },
+
         addItem: function (type, des, cal, car, fat, pro) {
             var newItem, ID;
 
@@ -100,6 +116,7 @@ var dataController = (function () {
 
         getData: function(){
             return {
+                bmiResult: data.bmiResult,
                 balance: data.balance,
                 totalFood: data.totals.food,
                 totalActivity: data.totals.activity,
@@ -120,6 +137,10 @@ var dataController = (function () {
 var UIController = (function () {
 
     var DOMstrings = {
+        inputWeight: '.bmi-weight-input',
+        inputHeight: '.bmi-height-input',
+        bmiBtn: '.bmi-submit-button',
+        outputBmi: '.bmi-result',
         inputType: '.add-type',
         inputDescription: '.add-description',
         inputCalories: '.add-calories-value',
@@ -139,6 +160,13 @@ var UIController = (function () {
     };
 
     return {
+        getBmiInput: function() {
+            return {
+                weight: parseFloat(document.querySelector(DOMstrings.inputWeight).value),
+                height: parseFloat(document.querySelector(DOMstrings.inputHeight).value),
+            }
+        },
+
         getinput: function () {
             return {
                 type: document.querySelector(DOMstrings.inputType).value,
@@ -147,6 +175,20 @@ var UIController = (function () {
                 carbohydrates: parseFloat(document.querySelector(DOMstrings.inputCarbohydrates).value),
                 fats: parseFloat(document.querySelector(DOMstrings.inputFats).value),
                 proteins: parseFloat(document.querySelector(DOMstrings.inputProteins).value),
+            }
+        },
+
+        displayBmi: function(result){
+            if(result === 0){
+                document.querySelector(DOMstrings.outputBmi).textContent = "Niedowaga";
+            } else if (result === 1){
+                document.querySelector(DOMstrings.outputBmi).textContent = "Waga prawidłowa";
+            } else if (result === 2){
+                document.querySelector(DOMstrings.outputBmi).textContent = "Nadwaga";
+            } else if (result === 3){
+                document.querySelector(DOMstrings.outputBmi).textContent = "Otyłość";
+            } else {
+                document.querySelector(DOMstrings.outputBmi).textContent = "Wprowadź dane aby dowiedzieć się czy Twoja waga jest prawidłowa";
             }
         },
 
@@ -176,6 +218,19 @@ var UIController = (function () {
         deleteListItem: function(selectorID){
             var el = document.getElementById(selectorID);
             el.parentNode.removeChild(el);
+        },
+
+        clearBmiFields: function () {
+            var fields, fieldsArr;
+            fields = document.querySelectorAll(DOMstrings.inputWeight + ', '+ DOMstrings.inputHeight);
+
+            fieldsArr = Array.prototype.slice.call(fields);
+
+            fieldsArr.forEach(function (current, index, array) {
+                current.value = "";
+            });
+
+            fieldsArr[0].focus();
         },
 
         clearFields: function () {
@@ -212,6 +267,9 @@ var controller = (function (dataCtrl, UICtrl) {
 
     var setupEventListeners = function () {
         var DOM = UICtrl.getDOMstrings();
+
+        document.querySelector(DOM.bmiBtn).addEventListener('click', ctrlCalculateBmi);
+
         document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem);
 
         document.addEventListener('keypress', function (event) {
@@ -222,6 +280,17 @@ var controller = (function (dataCtrl, UICtrl) {
         });
 
         document.querySelector(DOM.displayContainer).addEventListener('click', ctrlDeleteItem);
+    };
+
+    var ctrlCalculateBmi = function() {
+        var bmiInput, bmiResult;
+        // 1. pobrać dane z sekcji bmi
+        bmiInput = UICtrl.getBmiInput();
+        // 2. obliczyć bmi
+        bmiResult = dataCtrl.calculateBmi(bmiInput.weight, bmiInput.height);
+        // 3. wyswietlić rezultat
+        UICtrl.displayBmi(bmiResult);
+        UICtrl.clearBmiFields();
     };
 
     var updateData = function () {
