@@ -141,6 +141,10 @@ var UIController = (function () {
         inputHeight: '.bmi-height-input',
         bmiBtn: '.bmi-submit-button',
         outputBmi: '.bmi-result',
+        inputSex: '.sex-selection',
+        inputAge: '.age-input',
+        inputAchievment: '.achievment-selection',
+        bmrBtn: '.bmr-submit-button',
         inputType: '.add-type',
         inputDescription: '.add-description',
         inputCalories: '.add-calories-value',
@@ -164,6 +168,13 @@ var UIController = (function () {
             return {
                 weight: parseFloat(document.querySelector(DOMstrings.inputWeight).value),
                 height: parseFloat(document.querySelector(DOMstrings.inputHeight).value),
+            }
+        },
+
+        getBmrInput: function(){
+            return {
+                sex: document.querySelector(DOMstrings.inputSex).value,
+                age: parseInt(document.querySelector(DOMstrings.inputAge).value),
             }
         },
 
@@ -270,6 +281,8 @@ var controller = (function (dataCtrl, UICtrl) {
 
         document.querySelector(DOM.bmiBtn).addEventListener('click', ctrlCalculateBmi);
 
+        document.querySelector(DOM.bmrBtn).addEventListener('click', ctrlCalculateBmr);
+
         document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem);
 
         document.addEventListener('keypress', function (event) {
@@ -292,6 +305,11 @@ var controller = (function (dataCtrl, UICtrl) {
         UICtrl.displayBmi(bmiResult);
         UICtrl.clearBmiFields();
     };
+
+    var ctrlCalculateBmr = function(){
+        var bmrInput, bmrResult;
+        bmrInput = UICtrl.getBmrInput();
+    }
 
     var updateData = function () {
         // 1. przelicz bilans kaloryczne
