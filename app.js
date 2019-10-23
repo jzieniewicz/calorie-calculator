@@ -70,6 +70,23 @@ var dataController = (function () {
             return bmiResult;
         },
 
+        calculateBmr: function(weight, height, sex, age, achievment){
+            // obliczanie bmr (podstawowego zapotrzebowania kalorycznego) metodą Mifflin-St Jeor. 
+            // dla mężczyzn [9,99 x masa ciała (kg)] + [6,25 x wzrost (cm)] - [4,92 x wiek (lata)] + 5
+            // dla kobiet [9,99 x masa ciała (kg)] + [6,25 x wzrost (cm)] - [4,92 x wiek(lata)] - 161
+            var demand, bmr, pointer;
+            var activityRate = 1.4; //wartość dla normalnego funkcjonowania
+            if(sex === "man") pointer = 5;
+            else if(sex === "woman") pointer = -161
+            bmr = 9.99*weight + 625*height - 4.92*age + pointer; //tyle kalorii spala przez dobę organizm w czasie spoczynku
+
+            demand = bmr * activityRate;
+
+            if(achievment === "gain-weight") return demand += 400;
+            else if(achievment === "keep-weight") return demand;
+            else if(achievment === "reduce-weight") return demand -= 400;
+        },
+
         addItem: function (type, des, cal, car, fat, pro) {
             var newItem, ID;
 
@@ -145,6 +162,7 @@ var UIController = (function () {
         inputAge: '.age-input',
         inputAchievment: '.achievment-selection',
         bmrBtn: '.bmr-submit-button',
+        outputBmr: '.basal-metabolic-rate-title',
         inputType: '.add-type',
         inputDescription: '.add-description',
         inputCalories: '.add-calories-value',
@@ -175,6 +193,7 @@ var UIController = (function () {
             return {
                 sex: document.querySelector(DOMstrings.inputSex).value,
                 age: parseInt(document.querySelector(DOMstrings.inputAge).value),
+                achievment: document.querySelector(DOMstrings.inputAchievment).value,
             }
         },
 
@@ -201,6 +220,10 @@ var UIController = (function () {
             } else {
                 document.querySelector(DOMstrings.outputBmi).textContent = "Wprowadź dane aby dowiedzieć się czy Twoja waga jest prawidłowa";
             }
+        },
+
+        displayBmr: function(demand){
+            document.querySelector(DOMstrings.outputBmr).textContent = demand;
         },
 
         addListItem: function (obj, type) {
@@ -234,6 +257,19 @@ var UIController = (function () {
         clearBmiFields: function () {
             var fields, fieldsArr;
             fields = document.querySelectorAll(DOMstrings.inputWeight + ', '+ DOMstrings.inputHeight);
+
+            fieldsArr = Array.prototype.slice.call(fields);
+
+            fieldsArr.forEach(function (current, index, array) {
+                current.value = "";
+            });
+
+            fieldsArr[0].focus();
+        },
+
+        clearBmrFields: function () {
+            var fields, fieldsArr;
+            fields = document.querySelectorAll(DOMstrings.inputSex + ', '+ DOMstrings.inputAge + ', '+ DOMstrings.inputAchievment);
 
             fieldsArr = Array.prototype.slice.call(fields);
 
@@ -307,9 +343,14 @@ var controller = (function (dataCtrl, UICtrl) {
     };
 
     var ctrlCalculateBmr = function(){
-        var bmrInput, bmrResult;
+        var bmrInput, bmrResult, bmrResult;
+        bmiInput = UICtrl.getBmiInput();
         bmrInput = UICtrl.getBmrInput();
-    }
+        console.log(bmrInput.sex, bmrInput.achievment)
+        bmrResult = dataCtrl.calculateBmr(bmiInput.weight, bmiInput.height, bmrInput.sex, bmrInput.age, bmrInput.achievment);
+        UICtrl.displayBmr(bmrResult);
+        UICtrl.clearBmrFields();
+    };
 
     var updateData = function () {
         // 1. przelicz bilans kaloryczne
