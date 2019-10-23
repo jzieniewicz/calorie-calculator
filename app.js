@@ -16,14 +16,14 @@ var dataController = (function () {
         this.proteins = proteins;
     };
 
-    var calculateTotal = function(type) {
+    var calculateTotal = function (type) {
         var totalCalories = 0;
         var totalCarbs = 0;
         var totalFats = 0;
         var totalProteins = 0;
-        data.allItems[type].forEach(function(cur) {
+        data.allItems[type].forEach(function (cur) {
             totalCalories += cur.calories;
-            if (type === "food"){
+            if (type === "food") {
                 totalCarbs = cur.carbohydrates;
                 totalFats = cur.fats;
                 totalProteins = cur.proteins;
@@ -56,7 +56,7 @@ var dataController = (function () {
 
     return {
 
-        calculateBmi: function(weight, height){
+        calculateBmi: function (weight, height) {
             var bmi, bmiResult;
             // obliczanie bmi
             bmi = weight / Math.pow(height, 2);
@@ -70,21 +70,22 @@ var dataController = (function () {
             return bmiResult;
         },
 
-        calculateBmr: function(weight, height, sex, age, achievment){
+        calculateBmr: function (weight, height, sex, age, achievment) {
             // obliczanie bmr (podstawowego zapotrzebowania kalorycznego) metodą Mifflin-St Jeor. 
             // dla mężczyzn [9,99 x masa ciała (kg)] + [6,25 x wzrost (cm)] - [4,92 x wiek (lata)] + 5
             // dla kobiet [9,99 x masa ciała (kg)] + [6,25 x wzrost (cm)] - [4,92 x wiek(lata)] - 161
             var demand, bmr, pointer;
             var activityRate = 1.4; //wartość dla normalnego funkcjonowania
-            if(sex === "man") pointer = 5;
-            else if(sex === "woman") pointer = -161
-            bmr = 9.99*weight + 625*height - 4.92*age + pointer; //tyle kalorii spala przez dobę organizm w czasie spoczynku
+            if (sex === "man") pointer = 5;
+            else if (sex === "woman") pointer = -161
+            bmr = 9.99 * weight + 625 * height - 4.92 * age + pointer; //tyle kalorii spala przez dobę organizm w czasie spoczynku
 
             demand = bmr * activityRate;
 
-            if(achievment === "gain-weight") return demand += 400;
-            else if(achievment === "keep-weight") return demand;
-            else if(achievment === "reduce-weight") return demand -= 400;
+            if (achievment === "gain-weight") demand += 400;
+            else if (achievment === "keep-weight") demand;
+            else if (achievment === "reduce-weight") return demand -= 400;
+            return parseInt(demand);
         },
 
         addItem: function (type, des, cal, car, fat, pro) {
@@ -110,18 +111,18 @@ var dataController = (function () {
             return newItem;
         },
 
-        deleteItem: function(type, id) {
+        deleteItem: function (type, id) {
             var ids, index;
-            ids = data.allItems[type].map(function(current){
-                return current.id; 
+            ids = data.allItems[type].map(function (current) {
+                return current.id;
             });
             index = ids.indexOf(id);
-            if(index !== -1){
+            if (index !== -1) {
                 data.allItems[type].splice(index, 1);
             }
         },
 
-        calculateData: function(){
+        calculateData: function () {
             // obliczyć nabyte i spalone kalorie
             calculateTotal('food');
             calculateTotal('activity')
@@ -131,7 +132,7 @@ var dataController = (function () {
             data.balance = data.totals.food - data.totals.activity;
         },
 
-        getData: function(){
+        getData: function () {
             return {
                 bmiResult: data.bmiResult,
                 balance: data.balance,
@@ -182,14 +183,14 @@ var UIController = (function () {
     };
 
     return {
-        getBmiInput: function() {
+        getBmiInput: function () {
             return {
                 weight: parseFloat(document.querySelector(DOMstrings.inputWeight).value),
                 height: parseFloat(document.querySelector(DOMstrings.inputHeight).value),
             }
         },
 
-        getBmrInput: function(){
+        getBmrInput: function () {
             return {
                 sex: document.querySelector(DOMstrings.inputSex).value,
                 age: parseInt(document.querySelector(DOMstrings.inputAge).value),
@@ -208,22 +209,22 @@ var UIController = (function () {
             }
         },
 
-        displayBmi: function(result){
-            if(result === 0){
+        displayBmi: function (result) {
+            if (result === 0) {
                 document.querySelector(DOMstrings.outputBmi).textContent = "Niedowaga";
-            } else if (result === 1){
+            } else if (result === 1) {
                 document.querySelector(DOMstrings.outputBmi).textContent = "Waga prawidłowa";
-            } else if (result === 2){
+            } else if (result === 2) {
                 document.querySelector(DOMstrings.outputBmi).textContent = "Nadwaga";
-            } else if (result === 3){
+            } else if (result === 3) {
                 document.querySelector(DOMstrings.outputBmi).textContent = "Otyłość";
             } else {
                 document.querySelector(DOMstrings.outputBmi).textContent = "Wprowadź dane aby dowiedzieć się czy Twoja waga jest prawidłowa";
             }
         },
 
-        displayBmr: function(demand){
-            document.querySelector(DOMstrings.outputBmr).textContent = demand;
+        displayBmr: function (demand) {
+            document.querySelector(DOMstrings.caloriesBalance).textContent = demand;
         },
 
         addListItem: function (obj, type) {
@@ -249,14 +250,14 @@ var UIController = (function () {
 
         },
 
-        deleteListItem: function(selectorID){
+        deleteListItem: function (selectorID) {
             var el = document.getElementById(selectorID);
             el.parentNode.removeChild(el);
         },
 
         clearBmiFields: function () {
             var fields, fieldsArr;
-            fields = document.querySelectorAll(DOMstrings.inputWeight + ', '+ DOMstrings.inputHeight);
+            fields = document.querySelectorAll(DOMstrings.inputWeight + ', ' + DOMstrings.inputHeight);
 
             fieldsArr = Array.prototype.slice.call(fields);
 
@@ -269,7 +270,7 @@ var UIController = (function () {
 
         clearBmrFields: function () {
             var fields, fieldsArr;
-            fields = document.querySelectorAll(DOMstrings.inputSex + ', '+ DOMstrings.inputAge + ', '+ DOMstrings.inputAchievment);
+            fields = document.querySelectorAll(DOMstrings.inputWeight + ', ' + DOMstrings.inputHeight + ', ' + DOMstrings.inputSex + ', ' + DOMstrings.inputAge + ', ' + DOMstrings.inputAchievment);
 
             fieldsArr = Array.prototype.slice.call(fields);
 
@@ -293,7 +294,7 @@ var UIController = (function () {
             fieldsArr[0].focus();
         },
 
-        displayData: function(obj){
+        displayData: function (obj) {
             document.querySelector(DOMstrings.caloriesBalance).textContent = obj.balance;
             document.querySelector(DOMstrings.absorbedCalories).textContent = obj.totalFood;
             document.querySelector(DOMstrings.burnedCalories).textContent = obj.totalActivity;
@@ -331,7 +332,7 @@ var controller = (function (dataCtrl, UICtrl) {
         document.querySelector(DOM.displayContainer).addEventListener('click', ctrlDeleteItem);
     };
 
-    var ctrlCalculateBmi = function() {
+    var ctrlCalculateBmi = function () {
         var bmiInput, bmiResult;
         // 1. pobrać dane z sekcji bmi
         bmiInput = UICtrl.getBmiInput();
@@ -342,7 +343,7 @@ var controller = (function (dataCtrl, UICtrl) {
         UICtrl.clearBmiFields();
     };
 
-    var ctrlCalculateBmr = function(){
+    var ctrlCalculateBmr = function () {
         var bmrInput, bmrResult, bmrResult;
         bmiInput = UICtrl.getBmiInput();
         bmrInput = UICtrl.getBmrInput();
@@ -380,7 +381,7 @@ var controller = (function (dataCtrl, UICtrl) {
 
             // przelicz i zaktualizuj dane
             updateData();
-        } else if (input.type === "food" && input.description !== "" && !isNaN(input.calories) && input.calories > 0 && !isNaN(input.carbohydrates) && input.carbohydrates > 0 && !isNaN(input.fats) && input.fats > 0 && !isNaN(input.proteins) && input.proteins > 0){
+        } else if (input.type === "food" && input.description !== "" && !isNaN(input.calories) && input.calories > 0 && !isNaN(input.carbohydrates) && input.carbohydrates > 0 && !isNaN(input.fats) && input.fats > 0 && !isNaN(input.proteins) && input.proteins > 0) {
             // 2. dodaj element do dataControllera
             newItem = dataCtrl.addItem(input.type, input.description, input.calories, input.carbohydrates, input.fats, input.proteins);
 
@@ -396,10 +397,10 @@ var controller = (function (dataCtrl, UICtrl) {
 
     };
 
-    var ctrlDeleteItem = function(event) {
+    var ctrlDeleteItem = function (event) {
         var itemID, splitID, type, ID;
         itemID = event.target.parentNode.parentNode.parentNode.parentNode.id;
-        if(itemID){
+        if (itemID) {
             splitID = itemID.split('-');
             type = splitID[0];
             ID = parseInt(splitID[1]);
