@@ -84,8 +84,10 @@ var dataController = (function () {
 
             if (achievment === "gain-weight") demand += 400;
             else if (achievment === "keep-weight") demand;
-            else if (achievment === "reduce-weight") return demand -= 400;
-            return parseInt(demand);
+            else if (achievment === "reduce-weight") demand -= 400;
+            demand = parseInt(demand);
+            data.balance = demand;
+            return demand;
         },
 
         addItem: function (type, des, cal, car, fat, pro) {
@@ -129,7 +131,7 @@ var dataController = (function () {
             // obliczyć składniki odżywcze
 
             // obliczyć bilans: food - activity
-            data.balance = data.totals.food - data.totals.activity;
+            data.balance = data.balance - data.totals.food + data.totals.activity;
         },
 
         getData: function () {
