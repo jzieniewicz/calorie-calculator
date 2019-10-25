@@ -40,6 +40,7 @@ var dataController = (function () {
 
     var data = {
         bmiResult: -1,
+        bmr: 0,
         allItems: {
             food: [],
             activity: [],
@@ -86,7 +87,7 @@ var dataController = (function () {
             else if (achievment === "keep-weight") demand;
             else if (achievment === "reduce-weight") demand -= 400;
             demand = parseInt(demand);
-            data.balance = demand;
+            data.bmr = demand;
             return demand;
         },
 
@@ -131,7 +132,7 @@ var dataController = (function () {
             // obliczyć składniki odżywcze
 
             // obliczyć bilans: food - activity
-            data.balance = data.balance - data.totals.food + data.totals.activity;
+            data.balance = data.bmr - data.totals.food + data.totals.activity;
         },
 
         getData: function () {
