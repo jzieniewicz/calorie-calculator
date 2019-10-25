@@ -343,7 +343,7 @@ var controller = (function (dataCtrl, UICtrl) {
         bmiResult = dataCtrl.calculateBmi(bmiInput.weight, bmiInput.height);
         // 3. wyswietlić rezultat
         UICtrl.displayBmi(bmiResult);
-        UICtrl.clearBmiFields();
+        // UICtrl.clearBmiFields();
     };
 
     var ctrlCalculateBmr = function () {
@@ -353,7 +353,7 @@ var controller = (function (dataCtrl, UICtrl) {
         console.log(bmrInput.sex, bmrInput.achievment)
         bmrResult = dataCtrl.calculateBmr(bmiInput.weight, bmiInput.height, bmrInput.sex, bmrInput.age, bmrInput.achievment);
         UICtrl.displayBmr(bmrResult);
-        UICtrl.clearBmrFields();
+        // UICtrl.clearBmrFields();
     };
 
     var updateData = function () {
