@@ -28,7 +28,7 @@ body {
     width: 20em;
 }
 
-.bmi-submit-button, .bmr-submit-button, .add-button{
+.bmi-submit-button, .demand-submit-button, .add-button{
     background-image: linear-gradient(to right bottom, #FBDB89, #F48982);
     margin: 0.4em;
     padding: 0.7em 1em;
@@ -38,7 +38,7 @@ body {
     color: #fff;
 }
 
-.bmi-submit-button:focus, .bmr-submit-button:focus, .add-button:focus{
+.bmi-submit-button:focus, .demand-submit-button:focus, .add-button:focus{
     outline: none;
 }
 

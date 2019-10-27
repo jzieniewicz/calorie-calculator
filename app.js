@@ -50,8 +50,11 @@ var dataController = (function () {
             activity: 0,
         },
         carbohydrates: 0,
+        demandCarbohydrates: 0,
         fats: 0,
+        demandFats: 0,
         proteins: 0,
+        demandProteins: 0,
         balance: 0,
     };
 
@@ -77,6 +80,8 @@ var dataController = (function () {
             // dla kobiet [9,99 x masa ciała (kg)] + [6,25 x wzrost (cm)] - [4,92 x wiek(lata)] - 161
             var demand, bmr, pointer;
             var activityRate = 1.4; //wartość dla normalnego funkcjonowania
+
+            // obliczanie zapotrzebowania kalorycznego
             if (sex === "man") pointer = 5;
             else if (sex === "woman") pointer = -161
             bmr = 9.99 * weight + 625 * height - 4.92 * age + pointer; //tyle kalorii spala przez dobę organizm w czasie spoczynku
@@ -88,7 +93,32 @@ var dataController = (function () {
             else if (achievment === "reduce-weight") demand -= 400;
             demand = parseInt(demand);
             data.demand = demand;
+
             return demand;
+        },
+
+        calculateCarbs: function(demand){
+            var carbs;
+            carbs = 0.5 * demand / 4; //węglowodany powinny stanowić połowę dziennego zapotrzebowania kalorycznego, a jeden gram węglowodanów dostarcza 4 kcal
+            carbs = parseInt(carbs);
+            data.demandCarbohydrates = carbs;
+            return carbs;
+        },
+
+        calculateFats: function(demand){
+            var fats;
+            fats = 0.3 * demand / 9; //tłuszcze powinny stanowić 30% dziennego zapotrzebowania kalorycznego, a jeden gram tłuszczu dostarcza 9 kcal
+            fats = parseInt(fats);
+            data.demandFats = fats;
+            return fats;
+        },
+
+        calculateProteins: function(weight){
+            var proteins;
+            proteins = 0.9 * weight; //zapotrzebowanie na białko to 0.9 grama białka na każdy kilogram masy ciała
+            proteins = parseInt(proteins);
+            data.demandProteins = proteins;
+            return proteins;
         },
 
         addItem: function (type, des, cal, car, fat, pro) {
@@ -166,7 +196,7 @@ var UIController = (function () {
         inputSex: '.sex-selection',
         inputAge: '.age-input',
         inputAchievment: '.achievment-selection',
-        bmrBtn: '.bmr-submit-button',
+        demandBtn: '.demand-submit-button',
         inputType: '.add-type',
         inputDescription: '.add-description',
         inputCalories: '.add-calories-value',
@@ -321,7 +351,7 @@ var controller = (function (dataCtrl, UICtrl) {
 
         document.querySelector(DOM.bmiBtn).addEventListener('click', ctrlCalculateBmi);
 
-        document.querySelector(DOM.bmrBtn).addEventListener('click', ctrlCalculateDemand);
+        document.querySelector(DOM.demandBtn).addEventListener('click', ctrlCalculateDemand);
 
         document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem);
 
@@ -347,10 +377,18 @@ var controller = (function (dataCtrl, UICtrl) {
     };
 
     var ctrlCalculateDemand = function () {
-        var demandInput, bmiInput, demandResult;
+        var demandInput, bmiInput, demandResult, demandCarbs, demandFats, demandProteins;
         bmiInput = UICtrl.getBmiInput();
         demandInput = UICtrl.getDemandInput();
         demandResult = dataCtrl.calculateDemand(bmiInput.weight, bmiInput.height, demandInput.sex, demandInput.age, demandInput.achievment);
+        // obliczanie zapotrzebowania na węglowodany
+        demandCarbs = dataCtrl.calculateCarbs(demandResult);
+        // obliczanie zapotrzebowania na tłuszcze
+        demandFats = dataCtrl.calculateFats(demandResult);
+        // obliczanie zapotrzebowania na białko
+        demandProteins = dataCtrl.calculateProteins(bmiInput.weight);
+                    
+        console.log(demandCarbs, demandFats, demandProteins);
         UICtrl.displayDemand(demandResult);
         // UICtrl.clearDemandFields();
     };
