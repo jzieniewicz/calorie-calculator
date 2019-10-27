@@ -97,7 +97,7 @@ var dataController = (function () {
             return demand;
         },
 
-        calculateCarbs: function(demand){
+        calculateCarbs: function (demand) {
             var carbs;
             carbs = 0.5 * demand / 4; //węglowodany powinny stanowić połowę dziennego zapotrzebowania kalorycznego, a jeden gram węglowodanów dostarcza 4 kcal
             carbs = parseInt(carbs);
@@ -105,7 +105,7 @@ var dataController = (function () {
             return carbs;
         },
 
-        calculateFats: function(demand){
+        calculateFats: function (demand) {
             var fats;
             fats = 0.3 * demand / 9; //tłuszcze powinny stanowić 30% dziennego zapotrzebowania kalorycznego, a jeden gram tłuszczu dostarcza 9 kcal
             fats = parseInt(fats);
@@ -113,7 +113,7 @@ var dataController = (function () {
             return fats;
         },
 
-        calculateProteins: function(weight){
+        calculateProteins: function (weight) {
             var proteins;
             proteins = 0.9 * weight; //zapotrzebowanie na białko to 0.9 grama białka na każdy kilogram masy ciała
             proteins = parseInt(proteins);
@@ -380,17 +380,19 @@ var controller = (function (dataCtrl, UICtrl) {
         var demandInput, bmiInput, demandResult, demandCarbs, demandFats, demandProteins;
         bmiInput = UICtrl.getBmiInput();
         demandInput = UICtrl.getDemandInput();
-        demandResult = dataCtrl.calculateDemand(bmiInput.weight, bmiInput.height, demandInput.sex, demandInput.age, demandInput.achievment);
-        // obliczanie zapotrzebowania na węglowodany
-        demandCarbs = dataCtrl.calculateCarbs(demandResult);
-        // obliczanie zapotrzebowania na tłuszcze
-        demandFats = dataCtrl.calculateFats(demandResult);
-        // obliczanie zapotrzebowania na białko
-        demandProteins = dataCtrl.calculateProteins(bmiInput.weight);
-                    
-        console.log(demandCarbs, demandFats, demandProteins);
-        UICtrl.displayDemand(demandResult);
-        // UICtrl.clearDemandFields();
+        if (bmiInput.weight !== "" && !isNaN(bmiInput.weight) && bmiInput.height !== "" && !isNaN(bmiInput.height) && demandInput.sex !== "" && demandInput.age !== "" && !isNaN(demandInput.age) && demandInput.achievment !== "") {
+            demandResult = dataCtrl.calculateDemand(bmiInput.weight, bmiInput.height, demandInput.sex, demandInput.age, demandInput.achievment);
+            // obliczanie zapotrzebowania na węglowodany
+            demandCarbs = dataCtrl.calculateCarbs(demandResult);
+            // obliczanie zapotrzebowania na tłuszcze
+            demandFats = dataCtrl.calculateFats(demandResult);
+            // obliczanie zapotrzebowania na białko
+            demandProteins = dataCtrl.calculateProteins(bmiInput.weight);
+
+            console.log(demandCarbs, demandFats, demandProteins);
+            UICtrl.displayDemand(demandResult);
+            // UICtrl.clearDemandFields();
+        }
     };
 
     var updateData = function () {
