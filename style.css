@@ -56,6 +56,10 @@ body {
 
 
 /************display section********/
+.calories-balance{
+    font-size: 2em;
+}
+
 .calories-display{
     box-sizing: border-box;
     width: 50%;
