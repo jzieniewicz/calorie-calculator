@@ -40,7 +40,7 @@ var dataController = (function () {
 
     var data = {
         bmiResult: -1,
-        bmr: 0,
+        demand: 0,
         allItems: {
             food: [],
             activity: [],
@@ -71,7 +71,7 @@ var dataController = (function () {
             return bmiResult;
         },
 
-        calculateBmr: function (weight, height, sex, age, achievment) {
+        calculateDemand: function (weight, height, sex, age, achievment) {
             // obliczanie bmr (podstawowego zapotrzebowania kalorycznego) metodą Mifflin-St Jeor. 
             // dla mężczyzn [9,99 x masa ciała (kg)] + [6,25 x wzrost (cm)] - [4,92 x wiek (lata)] + 5
             // dla kobiet [9,99 x masa ciała (kg)] + [6,25 x wzrost (cm)] - [4,92 x wiek(lata)] - 161
@@ -87,7 +87,7 @@ var dataController = (function () {
             else if (achievment === "keep-weight") demand;
             else if (achievment === "reduce-weight") demand -= 400;
             demand = parseInt(demand);
-            data.bmr = demand;
+            data.demand = demand;
             return demand;
         },
 
@@ -132,12 +132,13 @@ var dataController = (function () {
             // obliczyć składniki odżywcze
 
             // obliczyć bilans: food - activity
-            data.balance = data.bmr - data.totals.food + data.totals.activity;
+            data.balance = data.demand - data.totals.food + data.totals.activity;
         },
 
         getData: function () {
             return {
                 bmiResult: data.bmiResult,
+                demand: data.demand,
                 balance: data.balance,
                 totalFood: data.totals.food,
                 totalActivity: data.totals.activity,
@@ -166,7 +167,6 @@ var UIController = (function () {
         inputAge: '.age-input',
         inputAchievment: '.achievment-selection',
         bmrBtn: '.bmr-submit-button',
-        outputBmr: '.basal-metabolic-rate-title',
         inputType: '.add-type',
         inputDescription: '.add-description',
         inputCalories: '.add-calories-value',
@@ -193,7 +193,7 @@ var UIController = (function () {
             }
         },
 
-        getBmrInput: function () {
+        getDemandInput: function () {
             return {
                 sex: document.querySelector(DOMstrings.inputSex).value,
                 age: parseInt(document.querySelector(DOMstrings.inputAge).value),
@@ -226,7 +226,7 @@ var UIController = (function () {
             }
         },
 
-        displayBmr: function (demand) {
+        displayDemand: function (demand) {
             document.querySelector(DOMstrings.caloriesBalance).textContent = demand;
         },
 
@@ -271,7 +271,7 @@ var UIController = (function () {
             fieldsArr[0].focus();
         },
 
-        clearBmrFields: function () {
+        clearDemandFields: function () {
             var fields, fieldsArr;
             fields = document.querySelectorAll(DOMstrings.inputWeight + ', ' + DOMstrings.inputHeight + ', ' + DOMstrings.inputSex + ', ' + DOMstrings.inputAge + ', ' + DOMstrings.inputAchievment);
 
@@ -321,7 +321,7 @@ var controller = (function (dataCtrl, UICtrl) {
 
         document.querySelector(DOM.bmiBtn).addEventListener('click', ctrlCalculateBmi);
 
-        document.querySelector(DOM.bmrBtn).addEventListener('click', ctrlCalculateBmr);
+        document.querySelector(DOM.bmrBtn).addEventListener('click', ctrlCalculateDemand);
 
         document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem);
 
@@ -346,14 +346,13 @@ var controller = (function (dataCtrl, UICtrl) {
         // UICtrl.clearBmiFields();
     };
 
-    var ctrlCalculateBmr = function () {
-        var bmrInput, bmrResult, bmrResult;
+    var ctrlCalculateDemand = function () {
+        var demandInput, bmiInput, demandResult;
         bmiInput = UICtrl.getBmiInput();
-        bmrInput = UICtrl.getBmrInput();
-        console.log(bmrInput.sex, bmrInput.achievment)
-        bmrResult = dataCtrl.calculateBmr(bmiInput.weight, bmiInput.height, bmrInput.sex, bmrInput.age, bmrInput.achievment);
-        UICtrl.displayBmr(bmrResult);
-        // UICtrl.clearBmrFields();
+        demandInput = UICtrl.getDemandInput();
+        demandResult = dataCtrl.calculateDemand(bmiInput.weight, bmiInput.height, demandInput.sex, demandInput.age, demandInput.achievment);
+        UICtrl.displayDemand(demandResult);
+        // UICtrl.clearDemandFields();
     };
 
     var updateData = function () {
@@ -373,7 +372,7 @@ var controller = (function (dataCtrl, UICtrl) {
         input = UICtrl.getinput();
 
         if (input.type === "activity" && input.description !== "" && !isNaN(input.calories) && input.calories > 0) {
-            // 2. dodaj element do dataControllera
+            // 2. dodaj element do struktury danych
             newItem = dataCtrl.addItem(input.type, input.description, input.calories, input.carbohydrates, input.fats, input.proteins);
 
             // 3. dodaj element do UI
