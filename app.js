@@ -161,7 +161,7 @@ var dataController = (function () {
             calculateTotal('activity')
             // obliczyć składniki odżywcze
 
-            // obliczyć bilans: food - activity
+            // obliczyć bilans: demand - food + activity
             data.balance = data.demand - data.totals.food + data.totals.activity;
         },
 
@@ -170,6 +170,9 @@ var dataController = (function () {
                 bmiResult: data.bmiResult,
                 demand: data.demand,
                 balance: data.balance,
+                demandCarbohydrates: data.demandCarbohydrates,
+                demandFats: data.demandFats,
+                demandProteins: data.demandProteins,
                 totalFood: data.totals.food,
                 totalActivity: data.totals.activity,
                 totalCarbs: data.carbohydrates,
@@ -256,8 +259,11 @@ var UIController = (function () {
             }
         },
 
-        displayDemand: function (demand) {
+        displayDemand: function (demand, carbs, fats, proteins) {
             document.querySelector(DOMstrings.caloriesBalance).textContent = demand;
+            document.querySelector(DOMstrings.outputCarbs).textContent = "0/"+carbs+"g";
+            document.querySelector(DOMstrings.outputFats).textContent = "0/"+fats+"g";
+            document.querySelector(DOMstrings.outputProteins).textContent = "0/"+proteins+"g";
         },
 
         addListItem: function (obj, type) {
@@ -331,9 +337,24 @@ var UIController = (function () {
             document.querySelector(DOMstrings.caloriesBalance).textContent = obj.balance;
             document.querySelector(DOMstrings.absorbedCalories).textContent = obj.totalFood;
             document.querySelector(DOMstrings.burnedCalories).textContent = obj.totalActivity;
-            document.querySelector(DOMstrings.outputCarbs).textContent = obj.totalCarbs;
-            document.querySelector(DOMstrings.outputFats).textContent = obj.totalFats;
-            document.querySelector(DOMstrings.outputProteins).textContent = obj.totalProteins;
+            if(obj.demandCarbohydrates>0 && !isNaN(obj.demandCarbohydrates)){
+                document.querySelector(DOMstrings.outputCarbs).textContent = obj.totalCarbs +"g/"+ obj.demandCarbohydrates+"g";
+            }
+            else{
+                document.querySelector(DOMstrings.outputCarbs).textContent = obj.totalCarbs+"g";
+            }
+            if(obj.demandFats>0 && !isNaN(obj.demandFats)){
+                document.querySelector(DOMstrings.outputFats).textContent = obj.totalFats +"g/"+ obj.demandFats+"g";
+            }
+            else{
+                document.querySelector(DOMstrings.outputFats).textContent = obj.totalFats+"g";
+            }
+            if(obj.demandProteins>0 && !isNaN(obj.demandProteins)){
+                document.querySelector(DOMstrings.outputProteins).textContent = obj.totalProteins +"g/"+ obj.demandProteins+"g";
+            }
+            else{
+                document.querySelector(DOMstrings.outputProteins).textContent = obj.totalProteins+"g";
+            }
         },
 
         getDOMstrings: function () {
@@ -390,7 +411,7 @@ var controller = (function (dataCtrl, UICtrl) {
             demandProteins = dataCtrl.calculateProteins(bmiInput.weight);
 
             console.log(demandCarbs, demandFats, demandProteins);
-            UICtrl.displayDemand(demandResult);
+            UICtrl.displayDemand(demandResult, demandCarbs, demandFats, demandProteins);
             // UICtrl.clearDemandFields();
         }
     };
