@@ -24,18 +24,17 @@ var dataController = (function () {
         data.allItems[type].forEach(function (cur) {
             totalCalories += cur.calories;
             if (type === "food") {
-                totalCarbs = cur.carbohydrates;
-                totalFats = cur.fats;
-                totalProteins = cur.proteins;
+                totalCarbs += cur.carbohydrates;
+                totalFats += cur.fats;
+                totalProteins += cur.proteins;
             }
-            cur.carbohydrates = 0;
-            cur.fats = 0;
-            cur.proteins = 0;
         });
         data.totals[type] = totalCalories;
-        data.carbohydrates += totalCarbs;
-        data.fats += totalFats;
-        data.proteins += totalProteins;
+        if (type === "food") {
+            data.carbohydrates = totalCarbs;
+            data.fats = totalFats;
+            data.proteins = totalProteins;
+        }
     };
 
     var data = {
@@ -261,9 +260,9 @@ var UIController = (function () {
 
         displayDemand: function (demand, carbs, fats, proteins) {
             document.querySelector(DOMstrings.caloriesBalance).textContent = demand;
-            document.querySelector(DOMstrings.outputCarbs).textContent = "0/"+carbs+"g";
-            document.querySelector(DOMstrings.outputFats).textContent = "0/"+fats+"g";
-            document.querySelector(DOMstrings.outputProteins).textContent = "0/"+proteins+"g";
+            document.querySelector(DOMstrings.outputCarbs).textContent = "0/" + carbs + "g";
+            document.querySelector(DOMstrings.outputFats).textContent = "0/" + fats + "g";
+            document.querySelector(DOMstrings.outputProteins).textContent = "0/" + proteins + "g";
         },
 
         addListItem: function (obj, type) {
@@ -337,23 +336,23 @@ var UIController = (function () {
             document.querySelector(DOMstrings.caloriesBalance).textContent = obj.balance;
             document.querySelector(DOMstrings.absorbedCalories).textContent = obj.totalFood;
             document.querySelector(DOMstrings.burnedCalories).textContent = obj.totalActivity;
-            if(obj.demandCarbohydrates>0 && !isNaN(obj.demandCarbohydrates)){
-                document.querySelector(DOMstrings.outputCarbs).textContent = obj.totalCarbs +"g/"+ obj.demandCarbohydrates+"g";
+            if (obj.demandCarbohydrates > 0 && !isNaN(obj.demandCarbohydrates)) {
+                document.querySelector(DOMstrings.outputCarbs).textContent = obj.totalCarbs + "g/" + obj.demandCarbohydrates + "g";
             }
-            else{
-                document.querySelector(DOMstrings.outputCarbs).textContent = obj.totalCarbs+"g";
+            else {
+                document.querySelector(DOMstrings.outputCarbs).textContent = obj.totalCarbs + "g";
             }
-            if(obj.demandFats>0 && !isNaN(obj.demandFats)){
-                document.querySelector(DOMstrings.outputFats).textContent = obj.totalFats +"g/"+ obj.demandFats+"g";
+            if (obj.demandFats > 0 && !isNaN(obj.demandFats)) {
+                document.querySelector(DOMstrings.outputFats).textContent = obj.totalFats + "g/" + obj.demandFats + "g";
             }
-            else{
-                document.querySelector(DOMstrings.outputFats).textContent = obj.totalFats+"g";
+            else {
+                document.querySelector(DOMstrings.outputFats).textContent = obj.totalFats + "g";
             }
-            if(obj.demandProteins>0 && !isNaN(obj.demandProteins)){
-                document.querySelector(DOMstrings.outputProteins).textContent = obj.totalProteins +"g/"+ obj.demandProteins+"g";
+            if (obj.demandProteins > 0 && !isNaN(obj.demandProteins)) {
+                document.querySelector(DOMstrings.outputProteins).textContent = obj.totalProteins + "g/" + obj.demandProteins + "g";
             }
-            else{
-                document.querySelector(DOMstrings.outputProteins).textContent = obj.totalProteins+"g";
+            else {
+                document.querySelector(DOMstrings.outputProteins).textContent = obj.totalProteins + "g";
             }
         },
 
@@ -431,14 +430,11 @@ var controller = (function (dataCtrl, UICtrl) {
 
         // 1. zabierz dane z wypelnionych pól
         input = UICtrl.getinput();
-
         if (input.type === "activity" && input.description !== "" && !isNaN(input.calories) && input.calories > 0) {
             // 2. dodaj element do struktury danych
-            newItem = dataCtrl.addItem(input.type, input.description, input.calories, input.carbohydrates, input.fats, input.proteins);
-
+            newItem = dataCtrl.addItem(input.type, input.description, input.calories);
             // 3. dodaj element do UI
             UICtrl.addListItem(newItem, input.type);
-
             // wyczyść pole
             UICtrl.clearFields();
 
@@ -447,10 +443,8 @@ var controller = (function (dataCtrl, UICtrl) {
         } else if (input.type === "food" && input.description !== "" && !isNaN(input.calories) && input.calories > 0 && !isNaN(input.carbohydrates) && input.carbohydrates > 0 && !isNaN(input.fats) && input.fats > 0 && !isNaN(input.proteins) && input.proteins > 0) {
             // 2. dodaj element do dataControllera
             newItem = dataCtrl.addItem(input.type, input.description, input.calories, input.carbohydrates, input.fats, input.proteins);
-
             // 3. dodaj element do UI
             UICtrl.addListItem(newItem, input.type);
-
             // wyczyść pole
             UICtrl.clearFields();
 
@@ -474,6 +468,7 @@ var controller = (function (dataCtrl, UICtrl) {
             UICtrl.deleteListItem(itemID);
             // 3. zaktualizować bilans i wyświetlić go
             updateData();
+
         }
     };
 
