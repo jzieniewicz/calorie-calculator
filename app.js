@@ -410,6 +410,7 @@ var controller = (function (dataCtrl, UICtrl) {
             demandProteins = dataCtrl.calculateProteins(bmiInput.weight);
 
             console.log(demandCarbs, demandFats, demandProteins);
+            ctrlCalculateBmi();
             UICtrl.displayDemand(demandResult, demandCarbs, demandFats, demandProteins);
             // UICtrl.clearDemandFields();
         }
