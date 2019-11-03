@@ -206,6 +206,7 @@ var UIController = (function () {
         inputProteins: '.add-proteins-value',
         inputFats: '.add-fats-value',
         inputBtn: '.add-button',
+        inputType: '.add-type',
         foodContainer: '.food-list',
         activityContainer: '.activity-list',
         caloriesBalance: '.calories-balance',
@@ -356,6 +357,14 @@ var UIController = (function () {
             }
         },
 
+        disabledFields: function () {
+            var fields = document.querySelectorAll(DOMstrings.inputCarbohydrates + ',' + DOMstrings.inputProteins + ',' + DOMstrings.inputFats);
+            
+            for (var i = 0; i < fields.length; i++) {
+                fields[i].disabled = !fields[i].disabled;
+              }
+        },
+
         getDOMstrings: function () {
             return DOMstrings;
         }
@@ -383,6 +392,8 @@ var controller = (function (dataCtrl, UICtrl) {
         });
 
         document.querySelector(DOM.displayContainer).addEventListener('click', ctrlDeleteItem);
+
+        document.querySelector(DOM.inputType).addEventListener('change', UICtrl.disabledFields);
     };
 
     var ctrlCalculateBmi = function () {
