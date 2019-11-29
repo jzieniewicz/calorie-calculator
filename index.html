@@ -7,31 +7,32 @@
     <link href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css">
     <link type="text/css" rel="stylesheet" href="style.css">
     <title>Aplikacja webowa wspierająca zbilansowanie odżywianie</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0"> 
 </head>
 
 <body>
     <div class="container">
         <div class="bmi-section">
-            <div class="bmi-weight-title">Waga:</div>
-            <div><input class="bmi-weight-input" type="number" placeholder="wprowadź swoją wagę w kilogramach"></div>
-            <div class="bmi-height-title">Wzrost:</div>
-            <div><input class="bmi-height-input" type="number" placeholder="wprowadź swój wzrost w metrach"></div>
-            <button class="bmi-submit-button">Oblicz swoje BMI</button>
-            <div class="bmi-result">Wprowadź dane aby dowiedzieć się czy Twoja waga jest prawidłowa</div>
+            <div class="bmi-weight-title">Weight</div>
+            <div><input class="bmi-weight-input" type="number" placeholder="insert weight in kilograms"></div>
+            <div class="bmi-height-title">Height</div>
+            <div><input class="bmi-height-input" type="number" placeholder="insert height in metres"></div>
+            <button class="bmi-submit-button">Calculate BMI</button>
+            <div class="bmi-result">Insert your data to found if your weight is healthy</div>
             <!--            <div class="bmi-result">Twoja waga jest prawidłowa</div>-->
         </div>
 
 
         <div class="demand-calories-section">
             <!--        Obliczanie podstawowego zapotrzebowania kalorycznego (BMR) metodą Mifflin-St Jeor-->
-            <div class="sex-selection-title">Wybierz swoją płeć</div>
+            <div class="sex-selection-title">Sex</div>
             <select class="sex-selection">
-                <option disabled selected value>wybierz opcję</option>
-                <option value="man">mężczyzna</option>
-                <option value="woman">kobieta</option>
+                <option disabled selected value>choose option</option>
+                <option value="man">male</option>
+                <option value="woman">female</option>
             </select>
-            <div class="age-title">Podaj swój wiek</div>
-            <div><input class="age-input" type="number" name="age" placeholder="podaj swój wiek"></div>
+            <div class="age-title">Age</div>
+            <div><input class="age-input" type="number" name="age" placeholder="insert your age"></div>
             <!-- <div class="activity-selection-title">Określ swoją aktywność</div>
             <select class="activity-selection">
                 <option value="no-activity">brak aktywności</option>
@@ -40,14 +41,14 @@
                 <option value="high-activity">wysoka aktywność</option>
                 <option value="very-high-activity">bardzo wysoka aktywność</option>
             </select> -->
-            <div class="achievment-selection-title">Co chcesz osiągnąć</div>
+            <div class="achievment-selection-title">Achievment</div>
             <select class="achievment-selection">
-                <option disabled selected value>wybierz opcję</option>
-                <option value="gain-weight">przytyć</option>
-                <option value="keep-weight">zachować wagę</option>
-                <option value="reduce-weight">schudnąć</option>
+                <option disabled selected value>choose option</option>
+                <option value="gain-weight">gain weight</option>
+                <option value="keep-weight">keep wieght</option>
+                <option value="reduce-weight">reduce weight</option>
             </select>
-            <div><button class="demand-submit-button">Oblicz zapotrzebowanie</button></div>
+            <div><button class="demand-submit-button">Calculate demand</button></div>
             <!--            <div class="full-metabolic-rate-title">Twoja całkowita przemiana materii wynosi 1500kcal</div>-->
         </div>
 
@@ -61,14 +62,14 @@
             <div class="calories-balance">2000</div>
             <div class="calories-display">
                 <div class="absorbed-calories clearfix">
-                    <div class="absorbed-calories-title">Dostarczone kalorie:</div>
+                    <div class="absorbed-calories-title">Absorbed calories</div>
                     <div class="right">
                         <div class="absorbed-calories-value">1600</div>
                     </div>
                 </div>
                 <br>
                 <div class="burned-calories clearfix">
-                    <div class="burned-calories-title">Spalone kalorie:</div>
+                    <div class="burned-calories-title">Burned calories</div>
                     <div class="right">
                         <div class="burned-calories-value">400</div>
                     </div>
@@ -77,21 +78,21 @@
 
             <div class="makronutrients-section">
                 <div class="carbohydrates clearfix">
-                    <div class="carbohydrates-title">Węglowodany:</div>
+                    <div class="carbohydrates-title">Carbohydrates</div>
                     <div class="right">
                         <div class="carbohydrates-value">10g</div>
                     </div>
                 </div>
                 <br>
                 <div class="proteins clearfix">
-                    <div class="proteins-title">Białka:</div>
+                    <div class="proteins-title">Proteins</div>
                     <div class="right">
                         <div class="proteins-value">10g</div>
                     </div>
                 </div>
                 <br>
                 <div class="fats clearfix">
-                    <div class="fats-title">Tłuszcze:</div>
+                    <div class="fats-title">Fats</div>
                     <div class="right">
                         <div class="fats-value">10g</div>
                     </div>
@@ -103,20 +104,20 @@
         <div class="list-section">
             <div class="add-element-container">
                 <select class="add-type">
-                    <option value="food" selected>Jedzenie</option>
-                    <option value="activity">Aktywność fizyczna</option>
+                    <option value="food" selected>Food</option>
+                    <option value="activity">Activity</option>
                 </select>
-                <input type="text" class="add-description" placeholder="Dodaj opis">
-                <input type="number" class="add-calories-value" placeholder="Kalorie">
-                <input type="number" class="add-carbohydrates-value" placeholder="Węglowodany">
-                <input type="number" class="add-proteins-value" placeholder="Białko">
-                <input type="number" class="add-fats-value" placeholder="Tłuszcze">
-                <div><button class="add-button">Dodaj</button></div>
+                <input type="text" class="add-description" placeholder="description">
+                <input type="number" class="add-calories-value" placeholder="calories">
+                <input type="number" class="add-carbohydrates-value" placeholder="carbohydrates">
+                <input type="number" class="add-proteins-value" placeholder="proteins">
+                <input type="number" class="add-fats-value" placeholder="fats">
+                <div><button class="add-button">Add</button></div>
             </div>
 
             <div class="display-list-container">
                 <div class="food">
-                    <div class="food-title">Jedzenie</div>
+                    <div class="food-title">Food</div>
                     <div class="food-list">
 
                         <!-- <div class="item clearfix" id="food-0">
@@ -134,7 +135,7 @@
                     </div>
                 </div>
                 <div class="activity">
-                    <div class="activity-title">Aktywność fizyczna</div>
+                    <div class="activity-title">Activity</div>
                     <div class="activity-list">
                         
                         <!-- <div class="item clearfix" id="activity-0">

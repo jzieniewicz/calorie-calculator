@@ -247,15 +247,15 @@ var UIController = (function () {
 
         displayBmi: function (result) {
             if (result === 0) {
-                document.querySelector(DOMstrings.outputBmi).textContent = "Niedowaga";
+                document.querySelector(DOMstrings.outputBmi).textContent = "Underweight";
             } else if (result === 1) {
-                document.querySelector(DOMstrings.outputBmi).textContent = "Waga prawidłowa";
+                document.querySelector(DOMstrings.outputBmi).textContent = "Healthy weight";
             } else if (result === 2) {
-                document.querySelector(DOMstrings.outputBmi).textContent = "Nadwaga";
+                document.querySelector(DOMstrings.outputBmi).textContent = "Overweight";
             } else if (result === 3) {
-                document.querySelector(DOMstrings.outputBmi).textContent = "Otyłość";
+                document.querySelector(DOMstrings.outputBmi).textContent = "Obesity";
             } else {
-                document.querySelector(DOMstrings.outputBmi).textContent = "Wprowadź dane aby dowiedzieć się czy Twoja waga jest prawidłowa";
+                document.querySelector(DOMstrings.outputBmi).textContent = "Insert your data to found if your weight is healthy";
             }
         },
 
