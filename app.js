@@ -161,7 +161,12 @@ var dataController = (function () {
             // obliczyć składniki odżywcze
 
             // obliczyć bilans: demand - food + activity
-            data.balance = data.demand - data.totals.food + data.totals.activity;
+            if(data.demand){
+                data.balance = data.demand - data.totals.food + data.totals.activity;
+            }
+            else{
+                data.balance = data.totals.food - data.totals.activity;
+            }
         },
 
         getData: function () {
