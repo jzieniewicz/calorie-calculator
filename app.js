@@ -161,10 +161,10 @@ var dataController = (function () {
             // obliczyć składniki odżywcze
 
             // obliczyć bilans: demand - food + activity
-            if(data.demand){
+            if (data.demand) {
                 data.balance = data.demand - data.totals.food + data.totals.activity;
             }
-            else{
+            else {
                 data.balance = data.totals.food - data.totals.activity;
             }
         },
@@ -364,10 +364,10 @@ var UIController = (function () {
 
         disabledFields: function () {
             var fields = document.querySelectorAll(DOMstrings.inputCarbohydrates + ',' + DOMstrings.inputProteins + ',' + DOMstrings.inputFats);
-            
+
             for (var i = 0; i < fields.length; i++) {
                 fields[i].disabled = !fields[i].disabled;
-              }
+            }
         },
 
         getDOMstrings: function () {
@@ -405,11 +405,17 @@ var controller = (function (dataCtrl, UICtrl) {
         var bmiInput, bmiResult;
         // 1. pobrać dane z sekcji bmi
         bmiInput = UICtrl.getBmiInput();
-        // 2. obliczyć bmi
-        bmiResult = dataCtrl.calculateBmi(bmiInput.weight, bmiInput.height);
-        // 3. wyswietlić rezultat
-        UICtrl.displayBmi(bmiResult);
-        // UICtrl.clearBmiFields();
+        //1.1 wzrost w metrach
+        if (bmiInput.height > 3) {
+            alert("Enter height in metres")
+        }
+        else {
+            // 2. obliczyć bmi
+            bmiResult = dataCtrl.calculateBmi(bmiInput.weight, bmiInput.height);
+            // 3. wyswietlić rezultat
+            UICtrl.displayBmi(bmiResult);
+            // UICtrl.clearBmiFields();
+        }
     };
 
     var ctrlCalculateDemand = function () {
