@@ -346,19 +346,19 @@ var UIController = (function () {
                 document.querySelector(DOMstrings.outputCarbs).textContent = (Math.round(obj.totalCarbs *100)/100).toFixed(2) + "g/" + obj.demandCarbohydrates + "g";
             }
             else {
-                document.querySelector(DOMstrings.outputCarbs).textContent = (Math.round(obj.totalCarbs *100)/100).toFixed(2) + "g";
+                document.querySelector(DOMstrings.outputCarbs).textContent = obj.totalCarbs + "g";
             }
             if (obj.demandFats > 0 && !isNaN(obj.demandFats)) {
                 document.querySelector(DOMstrings.outputFats).textContent = (Math.round(obj.totalFats *100)/100).toFixed(2) + "g/" + obj.demandFats + "g";
             }
             else {
-                document.querySelector(DOMstrings.outputFats).textContent = (Math.round(obj.totalFats *100)/100).toFixed(2) + "g";
+                document.querySelector(DOMstrings.outputFats).textContent = obj.totalFats + "g";
             }
             if (obj.demandProteins > 0 && !isNaN(obj.demandProteins)) {
                 document.querySelector(DOMstrings.outputProteins).textContent = (Math.round(obj.totalProteins *100)/100).toFixed(2) + "g/" + obj.demandProteins + "g";
             }
             else {
-                document.querySelector(DOMstrings.outputProteins).textContent = (Math.round(obj.totalProteins *100)/100).toFixed(2) + "g";
+                document.querySelector(DOMstrings.outputProteins).textContent = obj.totalProteins + "g";
             }
         },
 
