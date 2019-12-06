@@ -343,19 +343,19 @@ var UIController = (function () {
             document.querySelector(DOMstrings.absorbedCalories).textContent = obj.totalFood;
             document.querySelector(DOMstrings.burnedCalories).textContent = obj.totalActivity;
             if (obj.demandCarbohydrates > 0 && !isNaN(obj.demandCarbohydrates)) {
-                document.querySelector(DOMstrings.outputCarbs).textContent = (Math.round(obj.totalCarbs *100)/100).toFixed(2) + "g/" + obj.demandCarbohydrates + "g";
+                document.querySelector(DOMstrings.outputCarbs).textContent = (Math.round(obj.totalCarbs * 100) / 100).toFixed(2) + "g/" + obj.demandCarbohydrates + "g";
             }
             else {
                 document.querySelector(DOMstrings.outputCarbs).textContent = obj.totalCarbs + "g";
             }
             if (obj.demandFats > 0 && !isNaN(obj.demandFats)) {
-                document.querySelector(DOMstrings.outputFats).textContent = (Math.round(obj.totalFats *100)/100).toFixed(2) + "g/" + obj.demandFats + "g";
+                document.querySelector(DOMstrings.outputFats).textContent = (Math.round(obj.totalFats * 100) / 100).toFixed(2) + "g/" + obj.demandFats + "g";
             }
             else {
                 document.querySelector(DOMstrings.outputFats).textContent = obj.totalFats + "g";
             }
             if (obj.demandProteins > 0 && !isNaN(obj.demandProteins)) {
-                document.querySelector(DOMstrings.outputProteins).textContent = (Math.round(obj.totalProteins *100)/100).toFixed(2) + "g/" + obj.demandProteins + "g";
+                document.querySelector(DOMstrings.outputProteins).textContent = (Math.round(obj.totalProteins * 100) / 100).toFixed(2) + "g/" + obj.demandProteins + "g";
             }
             else {
                 document.querySelector(DOMstrings.outputProteins).textContent = obj.totalProteins + "g";
@@ -386,6 +386,8 @@ var controller = (function (dataCtrl, UICtrl) {
         document.querySelector(DOM.bmiBtn).addEventListener('click', ctrlCalculateBmi);
 
         document.querySelector(DOM.demandBtn).addEventListener('click', ctrlCalculateDemand);
+
+        // document.querySelector(DOM.search).addEventListener('click', search);
 
         document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem);
 
@@ -449,7 +451,7 @@ var controller = (function (dataCtrl, UICtrl) {
 
     var ctrlAddItem = function () {
 
-        var input, newItem;
+        var input, newItem, json;
 
         // 1. zabierz dane z wypelnionych pól
         input = UICtrl.getinput();
@@ -473,9 +475,32 @@ var controller = (function (dataCtrl, UICtrl) {
 
             // przelicz i zaktualizuj dane
             updateData();
+        } else if (input.type === "food" && input.description !== "") {
+            !async function(description){
+                description = input.description;
+                var url = "https://api.edamam.com/api/food-database/parser?app_key=5f170eb84b952c4fcea516af92f26774&app_id=0c94739e&ingr=";
+                url += description;
+                let data = await fetch(url)
+                    .then((resp) => resp.json())
+                    .then(data => {
+                        return data;
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+                var fetchedKalories = data.hints[0].food.nutrients.ENERC_KCAL;
+                var fetchedProteins = data.hints[0].food.nutrients.PROCNT;
+                var fetchedCarbs = data.hints[0].food.nutrients.CHOCDF;
+                var fetchedFats = data.hints[0].food.nutrients.FAT;
+                tempItem = dataCtrl.addItem(input.type, input.description, fetchedKalories, fetchedCarbs, fetchedFats, fetchedProteins);
+                UICtrl.addListItem(tempItem, input.type);
+                UICtrl.clearFields();
+                updateData();
+            }();
         }
 
     };
+
 
     var ctrlDeleteItem = function (event) {
         var itemID, splitID, type, ID;
