@@ -277,11 +277,11 @@ var UIController = (function () {
 
             if (type === 'food') {
                 element = DOMstrings.foodContainer;
-                html = '<div class="item clearfix" id="food-%id%"> <div class="item-description">%description%</div> <div class="toRight"> <div class="item-calories">%calories%</div> <div class="item-delete"> <button class="item-delete-btn"> <i class="ion-ios-close-outline"></i> </button> </div> </div> </div>'
+                html = '<div class="item clearfix" id="food-%id%"> <div class="item-description">%description%</div> <div class="toRight"> <div class="item-calories">%calories%</div> <div class="item-delete"> <button class="item-delete-btn"> x </button> </div> </div> </div>'
             }
             else if (type === 'activity') {
                 element = DOMstrings.activityContainer;
-                html = '<div class="item clearfix" id="activity-%id%"> <div class="item-description">%description%</div> <div class="toRight"> <div class="item-calories">%calories%</div> <div class="item-delete"> <button class="item-delete-btn"> <i class="ion-ios-close-outline"></i> </button> </div> </div> </div>'
+                html = '<div class="item clearfix" id="activity-%id%"> <div class="item-description">%description%</div> <div class="toRight"> <div class="item-calories">%calories%</div> <div class="item-delete"> <button class="item-delete-btn"> x </button> </div> </div> </div>'
             }
 
             // zastąpić placeholdera danymi użytkownika
@@ -504,7 +504,7 @@ var controller = (function (dataCtrl, UICtrl) {
 
     var ctrlDeleteItem = function (event) {
         var itemID, splitID, type, ID;
-        itemID = event.target.parentNode.parentNode.parentNode.parentNode.id;
+        itemID = event.target.parentNode.parentNode.parentNode.id;
         if (itemID) {
             splitID = itemID.split('-');
             type = splitID[0];
